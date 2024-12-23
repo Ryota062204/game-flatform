@@ -1,25 +1,9 @@
 <?php
 
-use Src\Controller\CreateController;
-use Src\Controller\LoginController;
-use Src\Controller\OverviewController;
-use Src\Controller\RegisterController;
+use App\Kernel;
 
-require '../vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
-$loader = new \Twig\Loader\FilesystemLoader('../resources');
-$twig = new \Twig\Environment($loader, [
-    'cache' => '../storage/cache',
-    'debug' => true
-]);
-
-$pdo = new PDO('mysql:host=localhost;dbname=XXX', 'root', 'root');
-
-switch ($_GET['page'] ?? 'overview') {
-    case 'overview':
-    default:
-        $controller = new OverviewController($twig, $pdo);
-        break;
-}
-
-$controller->render();
+return function (array $context) {
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
